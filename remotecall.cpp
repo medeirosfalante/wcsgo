@@ -7,6 +7,9 @@
 
 namespace remotecall {
 
+    bool Handle::IsValid() {
+        return (pid != -1);
+    }
      std::string Handle::GetWorkDirectory() {
         return GetSymbolicLinkTarget(("/proc/" + pidStr + "/cwd"));
     }
