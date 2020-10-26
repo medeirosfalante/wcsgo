@@ -11,6 +11,20 @@ namespace remotecall {
         return (pid != -1);
     }
 
+    // read data in memory
+    bool Handle::Read(void* address, void* buffer, size_t size) {
+        struct iovec local[1];
+        struct iovec remote[1];
+
+        local[0].iov_base = buffer;
+        local[0].iov_len = size;
+        remote[0].iov_base = address;
+        remote[0].iov_len = size;
+
+        return (process_vm_readv(pid, local, 1, remote, 1, 0) == size);
+    }
+
+
     // check processing running
     bool Handle::IsRunning() {
         if(!IsValid())
