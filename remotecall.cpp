@@ -7,6 +7,24 @@
 
 namespace remotecall {
 
+    Handle::Handle(pid_t target) {
+        std::stringstream buffer;
+        buffer << target;
+        pid = target;
+        pidStr = buffer.str();
+    }
+    Handle::Handle(std::string target) {
+        // check if string is number
+        if(strspn(target.c_str(), "0123456789") != target.size()) {
+            pid = -1;
+            pidStr.clear();
+        } else {
+            std::istringstream buffer(target);
+            pidStr = target;
+            buffer >> pid;
+        }
+    }
+
     void* MapModuleMemoryRegion::find(Handle handle, const char* data, const char* pattern) {
          char buffer[FINDPATTERN_CHUNKSIZE];
 
@@ -37,5 +55,6 @@ namespace remotecall {
          }
          return NULL;
     }
+    
 
 };
