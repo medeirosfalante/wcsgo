@@ -214,3 +214,52 @@ namespace remotecall {
     
 
 };
+
+// Exported Func find process
+bool remotecall::FindProcessByName(std::string name, remotecall::Handle* out) {
+    if(out == NULL || name.empty())
+        return false;
+
+    struct dirent *dire;
+
+    DIR *dir = opendir("/proc/");
+
+    if (dir) {
+        while ((dire = readdir(dir)) != NULL) {
+            if (dire->d_type != DT_DIR)
+                continue;
+
+            std::string mapsPath = ("/proc/" + std::string(dire->d_name) + "/maps");
+
+            if (access(mapsPath.c_str(), F_OK) == -1)
+                continue;
+
+            remotecall::Handle proc(dire->d_name);
+
+            if (!proc.IsValid() || !proc.IsRunning())
+                continue;
+
+            std::string procPath = proc.GetPath();
+
+            if(procPath.empty())
+                continue;
+
+            size_t namePos = procPath.find_last_of('/');
+
+            if(namePos == -1)
+                continue; // what?
+
+            std::string exeName = procPath.substr(namePos + 1);
+
+            if(exeName.compare(name) == 0) {
+                *out = proc;
+
+                return true;
+            }
+        }
+
+        closedir(dir);
+    }
+
+    return false;
+}

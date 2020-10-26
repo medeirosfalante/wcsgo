@@ -71,5 +71,7 @@ namespace remotecall {
         MapModuleMemoryRegion* GetRegionOfAddress(void* address);
         std::vector<MapModuleMemoryRegion> regions;
     };
+
+    bool FindProcessByName(std::string name, Handle* out);
     
 }
