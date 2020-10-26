@@ -11,6 +11,17 @@ namespace remotecall {
         return (pid != -1);
     }
 
+    //get call address in memory
+    unsigned long Handle::GetCallAddress(void* address) {
+        unsigned long code = 0;
+
+        if(Read((char*) address + 1, &code, sizeof(unsigned int))) {
+            return code + (unsigned long) address + 5;
+        }
+
+        return 0;
+    }
+
     // read data in memory
     bool Handle::Read(void* address, void* buffer, size_t size) {
         struct iovec local[1];
