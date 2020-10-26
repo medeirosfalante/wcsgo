@@ -56,7 +56,7 @@ namespace remotecall {
         Handle(pid_t target);
         Handle(std::string target);
         std::string GetPath();
-        std::string GetWorkingDirectory();
+        std::string GetWorkDirectory();
         pid_t GetPid(){ return pid; }
         void ParseMaps();
         bool IsValid();

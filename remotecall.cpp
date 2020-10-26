@@ -7,6 +7,14 @@
 
 namespace remotecall {
 
+     std::string Handle::GetWorkDirectory() {
+        return GetSymbolicLinkTarget(("/proc/" + pidStr + "/cwd"));
+    }
+
+    std::string Handle::GetPath() {
+        return GetSymbolicLinkTarget(("/proc/" + pidStr + "/exe"));
+    }
+
     Handle::Handle(pid_t target) {
         std::stringstream buffer;
         buffer << target;
