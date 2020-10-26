@@ -10,7 +10,18 @@ namespace remotecall {
     bool Handle::IsValid() {
         return (pid != -1);
     }
-     std::string Handle::GetWorkDirectory() {
+
+    // check processing running
+    bool Handle::IsRunning() {
+        if(!IsValid())
+            return false;
+
+        struct stat sts;
+        return !(stat(("/proc/" + pidStr).c_str(), &sts) == -1 && errno == ENOENT);
+    }
+
+
+    std::string Handle::GetWorkDirectory() {
         return GetSymbolicLinkTarget(("/proc/" + pidStr + "/cwd"));
     }
 
