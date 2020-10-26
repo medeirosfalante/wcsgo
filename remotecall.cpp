@@ -11,6 +11,32 @@ namespace remotecall {
         return (pid != -1);
     }
 
+    // Symbolic link taget
+    std::string Handle::GetSymbolicLinkTarget(std::string target) {
+        char buf[PATH_MAX];
+
+        ssize_t len = ::readlink(target.c_str(), buf, sizeof(buf) - 1);
+
+        if(len != -1) {
+            buf[len] = 0;
+
+            return std::string(buf);
+        }
+
+        return std::string();
+    }
+
+    // get region in memory
+    MapModuleMemoryRegion* Handle::GetRegionOfAddress(void* address) {
+        for(size_t i = 0; i < regions.size(); i++) {
+            if(regions[i].start > (unsigned long) address && (regions[i].start + regions[i].end) <= (unsigned long) address) {
+                return &regions[i];
+            }
+        }
+
+        return NULL;
+    }
+
     //get call address in memory
     unsigned long Handle::GetCallAddress(void* address) {
         unsigned long code = 0;
