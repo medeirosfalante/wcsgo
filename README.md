@@ -1,3 +1,3 @@
 # wcsgo
 
-CsGo WallHack for testing injenction and manipulation memory address in linux
+CsGo WallHack for testing memory address injection  in linux
